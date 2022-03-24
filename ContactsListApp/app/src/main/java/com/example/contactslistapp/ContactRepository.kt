@@ -19,8 +19,8 @@ class ContactRepository(application: Application) {
             val thread = Thread(Runnable {
                 contactDao.insert(contact) })
             thread.start()
-            } catch (e: Exception) { }
-        }
+        } catch (e: Exception) { }
+    }
 
     fun delete(contact: Contact) {
         try {

@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(mainBinding.root)
 
         val adapter = ContactAdapter({ contact ->
+            val intent = Intent(this, AddActivity::class.java)
             intent.putExtra(AddActivity.EXTRA_CONTACT_NAME, contact.name)
             intent.putExtra(AddActivity.EXTRA_CONTACT_NUMBER, contact.number)
             intent.putExtra(AddActivity.EXTRA_CONTACT_ID, contact.id)
@@ -30,9 +31,8 @@ class MainActivity : AppCompatActivity() {
             deleteDialog(contact)
         })
 
-        val lm = LinearLayoutManager(this)
         mainBinding.recyclerview.adapter = adapter
-        mainBinding.recyclerview.layoutManager = lm
+        mainBinding.recyclerview.layoutManager = LinearLayoutManager(this)
         mainBinding.recyclerview.setHasFixedSize(true)
 
         contactViewModel = ViewModelProvider(this).get(ContactViewModel::class.java)

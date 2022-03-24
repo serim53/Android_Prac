@@ -17,7 +17,7 @@ class AddActivity :AppCompatActivity() {
         addBinding = ActivityAddBinding.inflate(layoutInflater)
         setContentView(addBinding.root)
 
-        contactViewModel = ViewModelProvider(this).get(ContactViewModel::class.java)
+        contactViewModel = ViewModelProvider(this)[ContactViewModel::class.java]
 
         // intent null check & get extras
         if (intent != null && intent.hasExtra(EXTRA_CONTACT_NAME)
