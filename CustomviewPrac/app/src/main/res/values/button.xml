@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--background와 tint가 있을 때 background가 우선임-->
+    <!--background 내에서 배경을 바꿔주어야 함-->
+    <declare-styleable name="Button">
+        <attr name="android:textColor" />
+        <attr name="android:background"/>
+        <attr name="android:radius"/>
+        <attr name="customDimension"/>
+    </declare-styleable>
+
+    <attr name="customDimension" format="dimension"/>
+    <attr name="customButtonStyle" format="reference"/>
+
+    <!--appcompat을 가진 하나의 독자적인 버튼이 생성됨-->
+    <style name="CustomButton" parent="Widget.AppCompat.Button">
+        <item name="android:textColor">@android:color/background_dark</item>
+        <item name="android:background">@drawable/widget_button</item>
+        <item name="android:radius">4dp</item>
+    </style>
+
+    <dimen name="MyDimension">4dp</dimen>
+</resources>
