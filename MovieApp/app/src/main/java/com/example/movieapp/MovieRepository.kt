@@ -1,35 +1,37 @@
 package com.example.movieapp
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.await
 
 class MovieRepository(application: Application) {
 
     private val movieDao: MovieDao
-    private val movieList: LiveData<List<MovieEntity>>
 
     init {
         val db = AppDatabase.getInstance(application)
         movieDao = db!!.movieDao()
-        movieList = db.movieDao().getAll()
     }
 
-    fun getAll(): LiveData<List<MovieEntity>> {
+    suspend fun getAll(): List<MovieEntity> {
         return movieDao.getAll()
     }
 
-    fun insert(movieEntity: MovieEntity) {
+    suspend fun insert(movieEntity: MovieEntity) {
         movieDao.insert(movieEntity)
+        // Log.d("insert_room", movieEntity.toString())
     }
 
-    fun delete(movieEntity: MovieEntity) {
+    suspend fun delete(movieEntity: MovieEntity) {
         movieDao.delete(movieEntity)
     }
 
-    suspend fun getMovies(): List<Movie> = withContext(Dispatchers.IO){
-        RetrofitInstance.service.getMovies().await()
+    suspend fun getMovies(): List<Movie> {
+        return RetrofitInstance.service.getMovies().await()
     }
 }

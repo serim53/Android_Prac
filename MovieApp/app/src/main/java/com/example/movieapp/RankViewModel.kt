@@ -1,10 +1,8 @@
 package com.example.movieapp
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.util.Log
+import androidx.lifecycle.*
 import kotlinx.coroutines.launch
 
 class RankViewModel(application: Application) : AndroidViewModel(application) {
@@ -16,6 +14,18 @@ class RankViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             val response = repository.getMovies()
             myResponse.postValue(response)
+        }
+    }
+
+    fun insert(movie: Movie) {
+        viewModelScope.launch {
+            repository.insert(MovieEntity(movie.title, movie.image, movie.description))
+        }
+    }
+
+    fun delete(movie: Movie) {
+        viewModelScope.launch {
+            repository.delete(MovieEntity(movie.title, movie.image, movie.description))
         }
     }
 }

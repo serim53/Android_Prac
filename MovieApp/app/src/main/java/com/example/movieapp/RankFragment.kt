@@ -6,17 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.movieapp.databinding.FragmentRankBinding
 
 class RankFragment : Fragment() {
 
-    private val viewModel by viewModels<RankViewModel>()
+    private val rankViewModel by viewModels<RankViewModel>()
+    private val favoriteViewModel by viewModels<FavoriteViewModel>()
     private lateinit var fragmentRankBinding: FragmentRankBinding
-    private lateinit var adapter: MovieAdapter
+
+    //private lateinit var adapter: MovieAdapter
+    private val adapter by lazy {
+        MovieAdapter(this::onFavoriteMovieClicked)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,12 +32,39 @@ class RankFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initViews()
-        viewModel.getMovies()
+        rankViewModel.getMovies()
+        favoriteViewModel.getAll().observe(viewLifecycleOwner) { list ->
+            adapter.favoriteMovieList = list.map {
+                Movie(
+                    it.title,
+                    it.image,
+                    it.description
+                )
+            } as ArrayList<Movie>
+            adapter.notifyDataSetChanged()
+        }
+        rankViewModel.myResponse.observe(viewLifecycleOwner) {
+            adapter.submitList(it as ArrayList<Movie>)
+        }
     }
 
     private fun initViews() {
-        adapter = MovieAdapter()
+        //adapter = MovieAdapter()
         fragmentRankBinding.recyclerView.adapter = adapter
-        fragmentRankBinding.recyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+        fragmentRankBinding.recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                DividerItemDecoration.VERTICAL
+            )
+        )
+    }
+
+    private fun onFavoriteMovieClicked(movie: Movie, isFavorite: Boolean) {
+        if (isFavorite) {
+            rankViewModel.insert(movie)
+        } else {
+            rankViewModel.delete(movie)
+        }
+        favoriteViewModel.getAll()
     }
 }

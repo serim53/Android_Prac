@@ -4,6 +4,10 @@
         <variable
             name="movie"
             type="com.example.movieapp.Movie" />
+
+        <variable
+            name="isMovieFavorite"
+            type="boolean" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -25,8 +29,7 @@
             android:layout_height="70dp"
             app:layout_constraintTop_toTopOf="@+id/iv_movie"
             app:layout_constraintLeft_toLeftOf="@+id/iv_movie"
-            android:src="@drawable/imgbtn_state"
-            android:background="@android:color/transparent"/>
+            android:background="@{isMovieFavorite ? @drawable/ic_baseline_star_24 : @drawable/ic_baseline_star_outline_24}" />
 
         <TextView
             android:id="@+id/tv_title"

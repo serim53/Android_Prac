@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         mainBinding.bottomNavigation.run {
             setOnItemSelectedListener { item ->
                 when(item.itemId) {
-                    R.id.item_user -> {
+                    R.id.item_rank -> {
                         mainBinding.viewpager.currentItem = 0
                         true
                     }
