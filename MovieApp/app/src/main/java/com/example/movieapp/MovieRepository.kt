@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.await
@@ -18,13 +19,12 @@ class MovieRepository(application: Application) {
         movieDao = db!!.movieDao()
     }
 
-    suspend fun getAll(): List<MovieEntity> {
+    fun getAll(): Flow<List<MovieEntity>> {
         return movieDao.getAll()
     }
 
     suspend fun insert(movieEntity: MovieEntity) {
         movieDao.insert(movieEntity)
-        // Log.d("insert_room", movieEntity.toString())
     }
 
     suspend fun delete(movieEntity: MovieEntity) {

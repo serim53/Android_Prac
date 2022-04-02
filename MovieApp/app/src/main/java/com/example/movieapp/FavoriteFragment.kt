@@ -6,11 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.movieapp.databinding.FragmentFavoriteBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
 
 class FavoriteFragment : Fragment() {
 
@@ -30,22 +29,11 @@ class FavoriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initViews()
-
-        viewModel.getAll().observe(viewLifecycleOwner) { it ->
-            adapter.favoriteMovieList = ((it.map {
-                Movie(
-                    it.title,
-                    it.image,
-                    it.description
-                )
-            } as ArrayList<Movie>))
-            adapter.submitList(it.map {
-                Movie(
-                    it.title,
-                    it.image,
-                    it.description
-                )
-            } as ArrayList<Movie>)
+        lifecycleScope.launchWhenCreated {
+            viewModel.items.collect {
+                adapter.favoriteMovieList = it as ArrayList<Movie>
+                adapter.submitList(it)
+            }
         }
     }
 
@@ -63,7 +51,6 @@ class FavoriteFragment : Fragment() {
     private fun onFavoriteMovieClicked(movie: Movie, isFavorite: Boolean) {
         if (isFavorite.not()) {
             viewModel.delete(MovieEntity(movie.title, movie.image, movie.description))
-            viewModel.getAll()
         }
     }
 

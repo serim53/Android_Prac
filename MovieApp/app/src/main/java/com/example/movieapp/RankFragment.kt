@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.movieapp.databinding.FragmentRankBinding
+import kotlinx.coroutines.flow.collect
 
 class RankFragment : Fragment() {
 
@@ -33,18 +35,15 @@ class RankFragment : Fragment() {
 
         initViews()
         rankViewModel.getMovies()
-        favoriteViewModel.getAll().observe(viewLifecycleOwner) { list ->
-            adapter.favoriteMovieList = list.map {
-                Movie(
-                    it.title,
-                    it.image,
-                    it.description
-                )
-            } as ArrayList<Movie>
-            adapter.notifyDataSetChanged()
-        }
         rankViewModel.myResponse.observe(viewLifecycleOwner) {
             adapter.submitList(it as ArrayList<Movie>)
+        }
+
+        lifecycleScope.launchWhenCreated {
+            favoriteViewModel.items.collect {
+                adapter.favoriteMovieList = it as ArrayList<Movie>
+                adapter.notifyDataSetChanged()
+            }
         }
     }
 
@@ -65,6 +64,5 @@ class RankFragment : Fragment() {
         } else {
             rankViewModel.delete(movie)
         }
-        favoriteViewModel.getAll()
     }
 }
