@@ -8,6 +8,7 @@ import androidx.paging.PagingData
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pagingapplication.databinding.ActivityMainBinding
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -23,12 +24,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         _binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         initViews()
 
-        lifecycleScope.launch {
-            adapter.submitData(viewModel.getUser().value!! ?: PagingData.empty())
+        lifecycleScope.launchWhenResumed {
+            viewModel.getUser().collect {
+                adapter.submitData(it)
+            }
         }
     }
 

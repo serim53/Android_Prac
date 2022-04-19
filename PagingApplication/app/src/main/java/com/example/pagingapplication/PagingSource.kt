@@ -9,8 +9,7 @@ class PagingSource: PagingSource<Int, UserEntity>() {
     override fun getRefreshKey(state: PagingState<Int, UserEntity>): Int? {
         // 가장 가까운 키를 찾아서 페이지를 관리함
         return state.anchorPosition?.let { anchorPosition ->
-            val anchorPage = state.closestPageToPosition(anchorPosition)
-            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
+            state.closestItemToPosition(anchorPosition)?.id
         }
     }
 

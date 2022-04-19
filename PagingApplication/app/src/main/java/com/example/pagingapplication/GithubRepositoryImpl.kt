@@ -1,20 +1,20 @@
 package com.example.pagingapplication
-
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.paging.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import retrofit2.await
 
-class GithubRepositoryImpl() : GithubRepository{
-    override suspend fun getUsers(): LiveData<PagingData<User>> =
+
+class GithubRepositoryImpl : GithubRepository{
+    override fun getUsers(): Flow<PagingData<User>> =
         Pager(
             PagingConfig(pageSize = 20)
         ){
             PagingSource()
+            // cachedIn은 viewmodel에서 사용하는 것이 가장 좋음
+            // }.flow.cachedIn(CoroutineScope(Dispatchers.IO)).map { pagingData ->
         }.flow.map { pagingData ->
             pagingData.map { it.toUser() }
-        }.asLiveData()
-
+        }
 }

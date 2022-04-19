@@ -9,7 +9,6 @@ import com.example.pagingapplication.databinding.ItemUserBinding
 
 class UserAdapter : PagingDataAdapter<User, UserAdapter.ViewHolder>(userComparator) {
 
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
     }

@@ -9,6 +9,6 @@ data class UserEntity (
     @SerializedName("login")
     val login: String,
     @SerializedName("id")
-    val id: String
+    val id: Int
 
 )

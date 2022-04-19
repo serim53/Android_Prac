@@ -2,11 +2,8 @@ package com.example.pagingapplication
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
 
 interface GithubRepository {
-    suspend fun getUsers(): LiveData<PagingData<User>>
-
-//    companion object {
-//
-//    }
+    fun getUsers(): Flow<PagingData<User>>
 }
